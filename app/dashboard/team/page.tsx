@@ -1,21 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { TeamMembers } from "@/components/team/team-members";
 import { InviteMembers } from "@/components/team/invite-members";
 import { TeamActivity } from "@/components/team/team-activity";
 import { TeamSettings } from "@/components/team/team-settings";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { UserPlus } from "lucide-react";
+import { InviteMemberDialog } from "@/components/team/invite-team-member-dialog";
 
 export default function TeamPage() {
+  const [inviteDialogOpen, setInviteDialogOpen] = useState(false);
+
   return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-8">
@@ -25,7 +22,7 @@ export default function TeamPage() {
             Manage your team and collaborators
           </p>
         </div>
-        <Button>
+        <Button onClick={() => setInviteDialogOpen(true)}>
           <UserPlus className="w-4 h-4 mr-2" />
           Invite Member
         </Button>
@@ -53,6 +50,11 @@ export default function TeamPage() {
           <TeamSettings />
         </TabsContent>
       </Tabs>
+
+      <InviteMemberDialog
+        open={inviteDialogOpen}
+        onClose={() => setInviteDialogOpen(false)}
+      />
     </div>
   );
 }

@@ -9,6 +9,7 @@ import {
   LayoutDashboard,
   LogOut,
   Settings,
+  Users,
   Workflow,
 } from "lucide-react";
 import Link from "next/link";
@@ -39,6 +40,11 @@ const sidebarItems = [
     title: "Authentication",
     icon: <Key className="w-5 h-5" />,
     href: "/dashboard/auth-management",
+  },
+  {
+    title: "Team",
+    icon: <Users className="w-5 h-5" />,
+    href: "/dashboard/team",
   },
   {
     title: "Analytics",
