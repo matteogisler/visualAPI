@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,34 +10,46 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { BarChart3, Blocks, Clock, Users } from "lucide-react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export default function DashboardPage() {
-  const stats = [
-    {
-      title: "Total Workflows",
-      value: "12",
-      description: "Active workflows",
-      icon: <Blocks className="w-4 h-4" />,
-    },
-    {
-      title: "API Calls",
-      value: "2,543",
-      description: "Last 30 days",
-      icon: <BarChart3 className="w-4 h-4" />,
-    },
-    {
-      title: "Response Time",
-      value: "234ms",
-      description: "Average",
-      icon: <Clock className="w-4 h-4" />,
-    },
-    {
-      title: "Team Members",
-      value: "5",
-      description: "Active users",
-      icon: <Users className="w-4 h-4" />,
-    },
-  ];
+  const [stats, setStats] = useState({
+    workflows: 0,
+    apiCalls: 0,
+    responseTime: "0ms",
+    teamMembers: 0,
+  });
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        // Fetch total workflows
+        const workflowsSnapshot = await getDocs(collection(db, "workflows"));
+        const totalWorkflows = workflowsSnapshot.size;
+
+        // Fetch API calls (assuming each document is an API call)
+        const apiCallsSnapshot = await getDocs(collection(db, "api_calls"));
+        const totalApiCalls = apiCallsSnapshot.size;
+
+        // Fetch team members (assuming each document is a team member)
+        const teamMembersSnapshot = await getDocs(collection(db, "team_members"));
+        const totalTeamMembers = teamMembersSnapshot.size;
+
+        // Set stats state
+        setStats({
+          workflows: totalWorkflows,
+          apiCalls: totalApiCalls,
+          responseTime: "234ms",
+          teamMembers: totalTeamMembers,
+        });
+      } catch (error) {
+        console.error("Error fetching stats: ", error);
+      }
+    };
+
+    fetchStats();
+  }, []);
 
   return (
     <div className="p-8">
@@ -51,22 +64,49 @@ export default function DashboardPage() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat, index) => (
-          <Card key={index}>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">
-                {stat.title}
-              </CardTitle>
-              {stat.icon}
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
-              <p className="text-xs text-muted-foreground">
-                {stat.description}
-              </p>
-            </CardContent>
-          </Card>
-        ))}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Total Workflows</CardTitle>
+            <Blocks className="w-4 h-4" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.workflows}</div>
+            <p className="text-xs text-muted-foreground">Active workflows</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">API Calls</CardTitle>
+            <BarChart3 className="w-4 h-4" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.apiCalls}</div>
+            <p className="text-xs text-muted-foreground">Last 30 days</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Response Time</CardTitle>
+            <Clock className="w-4 h-4" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.responseTime}</div>
+            <p className="text-xs text-muted-foreground">Average</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Team Members</CardTitle>
+            <Users className="w-4 h-4" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.teamMembers}</div>
+            <p className="text-xs text-muted-foreground">Active users</p>
+          </CardContent>
+        </Card>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 mt-8">
