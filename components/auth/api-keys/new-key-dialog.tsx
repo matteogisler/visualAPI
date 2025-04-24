@@ -37,7 +37,7 @@ export function NewKeyDialog({ open, onClose, apiKey }: NewKeyDialogProps) {
           <DialogTitle>API Key Created</DialogTitle>
           <DialogDescription>
             Your new API key has been created. Make sure to copy it now as you
-            won't be able to see it again.
+            wont be able to see it again.
           </DialogDescription>
         </DialogHeader>
 

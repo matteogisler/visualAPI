@@ -72,7 +72,7 @@ export function TeamActivity() {
       <CardHeader>
         <CardTitle>Recent Activity</CardTitle>
         <CardDescription>
-          Track your team's recent actions and changes
+          Track your teams recent actions and changes
         </CardDescription>
       </CardHeader>
       <CardContent>

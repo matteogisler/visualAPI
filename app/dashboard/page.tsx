@@ -44,7 +44,7 @@ export default function DashboardPage() {
         <div>
           <h1 className="text-3xl font-bold">Welcome back</h1>
           <p className="text-muted-foreground">
-            Here's what's happening with your API workflows
+            Heres whats happening with your API workflows
           </p>
         </div>
         <Button>Create New Workflow</Button>

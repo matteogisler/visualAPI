@@ -27,7 +27,7 @@ export function TeamSettings() {
         <CardHeader>
           <CardTitle>General Settings</CardTitle>
           <CardDescription>
-            Configure your team's basic information
+            Configure your teams basic information
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
