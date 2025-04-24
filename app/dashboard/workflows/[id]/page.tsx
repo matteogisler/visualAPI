@@ -1,5 +1,6 @@
 // Server component (no "use client")
 
+import { getWorkflows } from "@/lib/workflows/storage";
 import WorkflowClient from "../workflow-client";
 
 export default function WorkflowPage({ params }: { params: { id: string } }) {
@@ -7,14 +8,11 @@ export default function WorkflowPage({ params }: { params: { id: string } }) {
 }
 
 export async function generateStaticParams() {
-  // Fetch or provide static paths for dynamic IDs
-  const workflows = [
-    { id: "1" },
-    { id: "2" },
-    { id: "3" }, // Example workflow IDs
-  ];
+  // Replace this with your actual API or database query
+  const workflows = await getWorkflows(); // Fetch all workflows dynamically
 
   return workflows.map((workflow) => ({
     id: workflow.id,
   }));
 }
+

@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import { auth, db } from "@/lib/firebase";
 import {
