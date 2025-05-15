@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { auth } from "@/lib/firebase";
 import { Plus, Search } from "lucide-react";
 import Link from "next/link";
 
@@ -44,6 +45,7 @@ const workflows = [
 ];
 
 export default function WorkflowsPage() {
+  const user = auth.currentUser;
   return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-8">

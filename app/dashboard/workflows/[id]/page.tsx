@@ -1,5 +1,3 @@
-// Server component (no "use client")
-
 import { getWorkflows } from "@/lib/workflows/storage";
 import WorkflowClient from "../workflow-client";
 

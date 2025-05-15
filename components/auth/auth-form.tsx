@@ -22,8 +22,10 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { saveUser } from "@/lib/workflows/storage";
 
 const formSchema = z.object({
+  name: z.string(),
   email: z.string().email("Invalid email address"),
   password: z
     .string()
@@ -41,6 +43,7 @@ export function AuthForm({ mode }: AuthFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
@@ -49,7 +52,12 @@ export function AuthForm({ mode }: AuthFormProps) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       if (mode === "signup") {
-        await createUserWithEmailAndPassword(auth, values.email, values.password);
+        const result = await createUserWithEmailAndPassword(auth, values.email, values.password);
+        const user = result.user;
+
+        if(user){
+          await saveUser(user.uid, values.name, values.email);
+        }
       } else {
         await signInWithEmailAndPassword(auth, values.email, values.password);
       }
@@ -81,6 +89,19 @@ export function AuthForm({ mode }: AuthFormProps) {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="John Doe" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="email"

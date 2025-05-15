@@ -14,14 +14,13 @@ import { WorkflowData } from "./types";
 
 export const saveUser = async (
   userId: string,
-  displayName: string | null,
+  name: string | null,
   email: string | null,
 ) => {
   const userSnap = await getDoc(doc(db, "users", userId));
   if (!userSnap.exists()) {
     await setDoc(doc(db, "users", userId), {
-      displayName,
-      isAdmin: false,
+      name,
       email,
     });
   }
@@ -70,6 +69,7 @@ export async function getWorkflow(id: string): Promise<WorkflowData> {
 
 export async function getWorkflows(): Promise<WorkflowData[]> {
   const user = auth.currentUser;
+  console.log(user)
   if (!user) throw new Error("User not authenticated");
 
   const workflowsRef = collection(db, "users", user.uid, "workflows");
