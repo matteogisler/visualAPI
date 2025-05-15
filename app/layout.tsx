@@ -22,7 +22,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <AuthProvider>
-          <ProtectedRoute>
             <ThemeProvider
               attribute="class"
               defaultTheme="system"
@@ -31,7 +30,6 @@ export default function RootLayout({
             >
               {children}
             </ThemeProvider>
-          </ProtectedRoute>
         </AuthProvider>
       </body>
     </html>
