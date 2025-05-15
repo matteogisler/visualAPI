@@ -1,75 +1,52 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { getWorkflows } from "@/lib/workflows/storage";
+import { useAuth } from "@/components/auth/AuthContext";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { auth } from "@/lib/firebase";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Plus, Search } from "lucide-react";
 import Link from "next/link";
-
-const workflows = [
-  {
-    id: 1,
-    name: "Stripe Payment Processing",
-    description: "Process payments and update customer records",
-    status: "active",
-    lastModified: "2024-03-20",
-  },
-  {
-    id: 2,
-    name: "Slack Notifications",
-    description: "Send automated notifications to Slack channels",
-    status: "active",
-    lastModified: "2024-03-19",
-  },
-  {
-    id: 3,
-    name: "Email Campaign",
-    description: "Trigger email campaigns based on user actions",
-    status: "draft",
-    lastModified: "2024-03-18",
-  },
-];
+import { WorkflowData } from "@/lib/workflows/types";
 
 export default function WorkflowsPage() {
-  const user = auth.currentUser;
+  const { user } = useAuth();
+  const [workflows, setWorkflows] = useState<WorkflowData[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) return;
+    setLoading(true);
+    getWorkflows(user.uid)
+      .then((w) => setWorkflows(w))
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
+  }, [user]);
+
+  if (loading) return <p>Loading…</p>;
+
   return (
     <div className="p-8">
+      {/* header */}
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold">Workflows</h1>
-          <p className="text-muted-foreground">
-            Manage and monitor your API workflows
-          </p>
+          <p className="text-muted-foreground">Manage and monitor your API workflows</p>
         </div>
         <Button asChild>
           <Link href="/dashboard/workflows/new">
-            <Plus className="w-4 h-4 mr-2" />
-            Create Workflow
+            <Plus className="w-4 h-4 mr-2" /> Create Workflow
           </Link>
         </Button>
       </div>
 
+      {/* search & filter */}
       <div className="flex gap-4 mb-6">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-          <Input
-            placeholder="Search workflows..."
-            className="pl-10"
-          />
+          <Input placeholder="Search workflows…" className="pl-10" />
         </div>
         <Select defaultValue="all">
           <SelectTrigger className="w-[180px]">
@@ -84,19 +61,18 @@ export default function WorkflowsPage() {
         </Select>
       </div>
 
+      {/* list */}
       <div className="grid gap-4">
-        {workflows.map((workflow) => (
-          <Card key={workflow.id}>
+        {workflows.map((wf) => (
+          <Card key={wf.id}>
             <CardHeader>
               <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle>{workflow.name}</CardTitle>
-                  <CardDescription>{workflow.description}</CardDescription>
+                  <CardTitle>{wf.name}</CardTitle>
+                  <CardDescription>{wf.description}</CardDescription>
                 </div>
                 <Button variant="outline" asChild>
-                  <Link href={`/dashboard/workflows/${workflow.id}`}>
-                    Edit Workflow
-                  </Link>
+                  <Link href={`/dashboard/workflows/${wf.id}`}>Edit Workflow</Link>
                 </Button>
               </div>
             </CardHeader>
@@ -106,15 +82,14 @@ export default function WorkflowsPage() {
                   Status:{" "}
                   <span
                     className={
-                      workflow.status === "active"
+                      wf.status === "active"
                         ? "text-green-600 font-medium"
                         : "text-yellow-600 font-medium"
                     }
                   >
-                    {workflow.status}
+                    {wf.status}
                   </span>
                 </div>
-                <div>Last modified: {workflow.lastModified}</div>
               </div>
             </CardContent>
           </Card>

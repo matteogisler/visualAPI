@@ -67,16 +67,11 @@ export async function getWorkflow(id: string): Promise<WorkflowData> {
   return workflowDoc.data() as WorkflowData;
 }
 
-export async function getWorkflows(): Promise<WorkflowData[]> {
-  const user = auth.currentUser;
-  console.log(user)
-  if (!user) throw new Error("User not authenticated");
-
-  const workflowsRef = collection(db, "users", user.uid, "workflows");
+export async function getWorkflows(userId: string): Promise<WorkflowData[]> {
+  const workflowsRef = collection(db, "users", userId, "workflows");
   const q = query(workflowsRef, orderBy("updatedAt", "desc"));
   const snapshot = await getDocs(q);
-  
-  return snapshot.docs.map(doc => doc.data() as WorkflowData);
+  return snapshot.docs.map((d) => d.data() as WorkflowData);
 }
 
 export async function deleteWorkflow(id: string): Promise<void> {
