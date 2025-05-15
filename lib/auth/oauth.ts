@@ -77,9 +77,3 @@ export async function getOAuthConnections(): Promise<OAuthConnection[]> {
   const snapshot = await getDocs(connectionsRef);
   return snapshot.docs.map(doc => doc.data() as OAuthConnection);
 }
-
-export async function refreshOAuthToken(connectionId: string): Promise<void> {
-  // Implement token refresh logic here
-  // This would typically involve making a request to the OAuth provider's token endpoint
-  // using the refresh token to obtain a new access token
-}
