@@ -89,6 +89,8 @@ export function AuthForm({ mode }: AuthFormProps) {
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          {mode === "login"
+            ? "" :
           <FormField
             control={form.control}
             name="name"
@@ -101,7 +103,7 @@ export function AuthForm({ mode }: AuthFormProps) {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          />}
           <FormField
             control={form.control}
             name="email"
