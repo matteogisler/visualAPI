@@ -1,5 +1,3 @@
-// "use client";
-
 import { auth, db } from "@/lib/firebase";
 import {
   collection,
@@ -13,6 +11,21 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { WorkflowData } from "./types";
+
+export const saveUser = async (
+  userId: string,
+  displayName: string | null,
+  email: string | null,
+) => {
+  const userSnap = await getDoc(doc(db, "users", userId));
+  if (!userSnap.exists()) {
+    await setDoc(doc(db, "users", userId), {
+      displayName,
+      isAdmin: false,
+      email,
+    });
+  }
+};
 
 export async function saveWorkflow(workflow: Partial<WorkflowData>): Promise<WorkflowData> {
   const user = auth.currentUser;
