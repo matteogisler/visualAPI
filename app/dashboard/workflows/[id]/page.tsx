@@ -6,8 +6,7 @@ export default function WorkflowPage({ params }: { params: { id: string } }) {
 }
 
 export async function generateStaticParams() {
-  // Replace this with your actual API or database query
-  const workflows = await getWorkflows(); // Fetch all workflows dynamically
+  const workflows = await getWorkflows(); 
 
   return workflows.map((workflow) => ({
     id: workflow.id,
