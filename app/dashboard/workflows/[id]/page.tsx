@@ -6,10 +6,10 @@ export default function WorkflowPage({ params }: { params: { id: string } }) {
 }
 
 export async function generateStaticParams() {
-  const workflows = await getWorkflows(); 
+  // const workflows = await getWorkflows(); 
 
-  return workflows.map((workflow) => ({
-    id: workflow.id,
-  }));
+  // return workflows.map((workflow) => ({
+  //   id: workflow.id,
+  // }));
 }
 
